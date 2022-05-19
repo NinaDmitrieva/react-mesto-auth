@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect } from 'react';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Route, Switch, useHistory } from 'react-router-dom';
 
 import Header from './Header';
 import Footer from './Footer';
@@ -17,7 +17,6 @@ import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
 import InfoTooltip from './InfoTooltip';
 import * as auth from './../utils/auth'
-
 
 export default function App() {
 
@@ -57,6 +56,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    if(loggedIn)
     api.getUserInfo()
       .then((data) => {
         setCurrentUser(data);
@@ -83,9 +83,10 @@ export default function App() {
               history.push('/');
             }
           })
-          .catch((err) => {
-            console.log(err);
-          })
+          .catch(() => {
+            setIsInfoTooltip(true);
+            setLoggedIn(false)
+      })
   }
 
   const handleRegisterSubmit = (email, password) => {
@@ -96,9 +97,6 @@ export default function App() {
           setLoggedIn(true)
           history.push("/sign-in");
         }})
-        .catch((err) => {
-        console.log(err);
-      })
       .catch(() => {
         setIsInfoTooltip(true);
         setLoggedIn(false)

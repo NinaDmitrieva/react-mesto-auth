@@ -26,7 +26,6 @@ export default function Login({onLogin}) {
         }
     }
 
-
     return (
 
         <section className='login'>
