@@ -4,7 +4,7 @@ function requestResponse(res) {
     if (res.ok) {
         return res.json();
     }
-   return Promise.reject(`Все сломалось:( ${res.status}`);
+    return Promise.reject(`Все сломалось:( ${res.status}`);
 };
 
 export const registration = (email, password) => {
@@ -15,8 +15,9 @@ export const registration = (email, password) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            email, 
-            password })
+            email,
+            password
+        })
     })
         .then(requestResponse)
 };
@@ -35,7 +36,7 @@ export const authorization = (email, password) => {
         })
     })
         .then(requestResponse)
-        
+
 };
 
 export const getUserData = (token) => {

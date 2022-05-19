@@ -39,31 +39,31 @@ export default function App() {
 
     if (jwt) {
       auth.getUserData(jwt)
-          .then((res) => {
-            if(res)
+        .then((res) => {
+          if (res)
             setLoggedIn(true);
-            setEmail(res.data.email);
-            history.push('/');
+          setEmail(res.data.email);
+          history.push('/');
         })
         .catch((err) => {
           console.log(err);
         })
     }
   }
-  
+
   useEffect(() => {
     handleTokenCheck();
   }, []);
 
   useEffect(() => {
-    if(loggedIn)
-    api.getUserInfo()
-      .then((data) => {
-        setCurrentUser(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+    if (loggedIn)
+      api.getUserInfo()
+        .then((data) => {
+          setCurrentUser(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
     api.getInitialCards()
       .then((cards) => {
         setCards(cards)
@@ -75,28 +75,29 @@ export default function App() {
 
   function handleLoginSubmit(email, password) {
     auth.authorization(email, password)
-          .then((res) => {
-            if(res) {
-              localStorage.setItem('jwt', res.token)
-              setEmail(email);
-              setLoggedIn(true);
-              history.push('/');
-            }
-          })
-          .catch(() => {
-            setIsInfoTooltip(true);
-            setLoggedIn(false)
+      .then((res) => {
+        if (res) {
+          localStorage.setItem('jwt', res.token)
+          setEmail(email);
+          setLoggedIn(true);
+          history.push('/');
+        }
+      })
+      .catch(() => {
+        setIsInfoTooltip(true);
+        setLoggedIn(false)
       })
   }
 
   const handleRegisterSubmit = (email, password) => {
     auth.registration(email, password)
-        .then((res) => {
-          if(res) {
+      .then((res) => {
+        if (res) {
           setIsInfoTooltip(true);
           setLoggedIn(true)
           history.push("/sign-in");
-        }})
+        }
+      })
       .catch(() => {
         setIsInfoTooltip(true);
         setLoggedIn(false)
@@ -226,41 +227,41 @@ export default function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="root">
         <div className="page">
-          <Header 
-          email={email} 
-          loggedIn={loggedIn}
-          exitUser={exitUser} 
+          <Header
+            email={email}
+            loggedIn={loggedIn}
+            exitUser={exitUser}
           />
 
           <Switch>
 
-          <ProtectedRoute 
-            exact path="/"
-            loggedIn={loggedIn} 
-            component={Main}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatarClick={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleConfirmClick}
-            cards={cards}
+            <ProtectedRoute
+              exact path="/"
+              loggedIn={loggedIn}
+              component={Main}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatarClick={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleConfirmClick}
+              cards={cards}
             />
-          <Route path="/sign-up"> 
-            <Register 
+            <Route path="/sign-up">
+              <Register
                 onRegister={handleRegisterSubmit}
-            />
-          </Route>
-           
-          <Route path="/sign-in"> 
-            <Login
+              />
+            </Route>
+
+            <Route path="/sign-in">
+              <Login
                 onLogin={handleLoginSubmit}
-            />
-          </Route>
+              />
+            </Route>
 
-          <Footer />
+            <Footer />
 
-        </Switch>
+          </Switch>
 
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
@@ -296,7 +297,7 @@ export default function App() {
             onClose={closeAllPopups}
           />
 
-          <InfoTooltip 
+          <InfoTooltip
             onClose={closeAllPopups}
             isOpen={isInfoTooltip}
             loggedIn={loggedIn}
