@@ -7,7 +7,7 @@ function requestResponse(res) {
     return Promise.reject(`Все сломалось:( ${res.status}`);
 };
 
-export const registration = (email, password) => {
+export const register = (email, password) => {
     return fetch(`${base_Url}/signup`, {
         method: 'POST',
         headers: {

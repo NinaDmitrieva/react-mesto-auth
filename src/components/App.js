@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route,Routes, useNavigate } from 'react-router-dom';
 
 import Header from './Header';
 import Footer from './Footer';
@@ -28,11 +28,12 @@ export default function App() {
   const [email, setEmail] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
   const [isInfoTooltip, setIsInfoTooltip] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const [card, setCard] = useState({});
   const [deletedPopup, setDeletedPopup] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+
 
   function handleTokenCheck() {
     const jwt = localStorage.getItem('jwt');
@@ -41,9 +42,9 @@ export default function App() {
       auth.getUserData(jwt)
         .then((res) => {
           if (res)
-            setLoggedIn(true);
+          setLoggedIn(true);
           setEmail(res.data.email);
-          history.push('/');
+          navigate('/');
         })
         .catch((err) => {
           console.log(err);
@@ -80,7 +81,7 @@ export default function App() {
           localStorage.setItem('jwt', res.token)
           setEmail(email);
           setLoggedIn(true);
-          history.push('/');
+          navigate('/');
         }
       })
       .catch(() => {
@@ -90,12 +91,12 @@ export default function App() {
   }
 
   const handleRegisterSubmit = (email, password) => {
-    auth.registration(email, password)
+    auth.register(email, password)
       .then((res) => {
         if (res) {
           setIsInfoTooltip(true);
           setLoggedIn(true)
-          history.push("/sign-in");
+          navigate("/sign-in");
         }
       })
       .catch(() => {
@@ -139,6 +140,7 @@ export default function App() {
     setRenderLoading(true)
     api.setUserInfo(user.name, user.about).
       then((userData) => {
+        console.log(userData)
         setCurrentUser({
           ...currentUser,
           name: userData.name,
@@ -233,35 +235,34 @@ export default function App() {
             exitUser={exitUser}
           />
 
-          <Switch>
-
-            <ProtectedRoute
-              exact path="/"
-              loggedIn={loggedIn}
-              component={Main}
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatarClick={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={handleConfirmClick}
-              cards={cards}
-            />
-            <Route path="/sign-up">
-              <Register
-                onRegister={handleRegisterSubmit}
+          <Routes>
+            <Route exact path="*" element={
+              <ProtectedRoute
+                exact path="/"
+                loggedIn={loggedIn}
+                component={Main}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onEditAvatarClick={handleEditAvatarClick}
+                onCardClick={handleCardClick}
+                onCardLike={handleCardLike}
+                onCardDelete={handleConfirmClick}
+                cards={cards}
+                />}
               />
+            <Route path="/sign-up" element={
+                <> <Register onRegister={handleRegisterSubmit}/> </>
+              }>
             </Route>
 
-            <Route path="/sign-in">
-              <Login
-                onLogin={handleLoginSubmit}
-              />
+            <Route path="/sign-in" element={
+              <> <Login onLogin={handleLoginSubmit}/> </>
+              }>
             </Route>
 
-            <Footer />
-
-          </Switch>
+            <Route element={<><Footer /></>}></Route>
+           
+          </Routes>
 
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
