@@ -132,7 +132,7 @@ export default function App() {
         console.log(err)
       })
       .finally(() => {
-        setRenderLoading(false)
+        setRenderLoading(false) 
       })
   };
 
@@ -233,12 +233,11 @@ export default function App() {
             email={email}
             loggedIn={loggedIn}
             exitUser={exitUser}
-          />
+          /> 
 
           <Routes>
             <Route exact path="*" element={
               <ProtectedRoute
-                exact path="/"
                 loggedIn={loggedIn}
                 component={Main}
                 onEditProfile={handleEditProfileClick}
