@@ -34,7 +34,6 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
-
   function handleTokenCheck() {
     const jwt = localStorage.getItem('jwt');
 
